@@ -5,7 +5,7 @@ data "aws_route53_zone" "front" {
 
 resource "aws_route53_record" "front" {
   zone_id = data.aws_route53_zone.front.zone_id
-  name    = var.domain
+  name    = "onui.${var.domain}"
   type    = "A"
 
   alias {
