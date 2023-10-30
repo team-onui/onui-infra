@@ -1,5 +1,5 @@
 resource "aws_vpc" "vpc" {
-  assign_generated_ipv6_cidr_block     = true
+  assign_generated_ipv6_cidr_block     = false
   cidr_block                           = "10.0.0.0/24"
   enable_dns_hostnames                 = true
   enable_dns_support                   = true
@@ -8,7 +8,7 @@ resource "aws_vpc" "vpc" {
 
   tags = {
     Name = "${var.app_name}-VPC"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -24,7 +24,7 @@ resource "aws_subnet" "public" {
 
   tags = {
     Name = "public-subnet-${data.aws_availability_zones.available.names[count.index]}"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -37,7 +37,7 @@ resource "aws_subnet" "private" {
 
   tags = {
     Name = "private-subnet-${data.aws_availability_zones.available.names[count.index]}"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -46,7 +46,7 @@ resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "${var.app_name}-igw"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -59,6 +59,9 @@ resource "aws_route" "internet_access" {
 resource "aws_eip" "nat-eip" {
   count       = var.az_count
   depends_on  = [aws_internet_gateway.igw]
+  tags = {
+    Name = "onui-natgw-eip"
+  }
 }
 
 # NAT 게이트웨이 생성
@@ -69,7 +72,7 @@ resource "aws_nat_gateway" "nat-gw" {
 
   tags = {
     Name = "${var.app_name}-nat-gw"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -82,7 +85,7 @@ resource "aws_route_table" "public-rt" {
   }
   tags = {
     Name = "public-rt"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -91,7 +94,7 @@ resource "aws_route_table" "private-rt" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "private-rt"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
