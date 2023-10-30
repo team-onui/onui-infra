@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "default" {
   force_destroy = true
   tags = {
     Name = "${var.app_name}-submit"
-    name = "2-2Admin"
+    name = "onui"
   }
 }
 
@@ -40,8 +40,14 @@ resource "aws_s3_bucket_cors_configuration" "default" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["PUT","GET"]
-    allowed_origins = ["*"]//나중에 Domain 추가
+    allowed_methods = ["PUT"]
+    allowed_origins = ["https://${var.app_name}.${var.domain}"]//나중에 Domain 추가
+    expose_headers = ["ETag"]
+  }
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET"]
+    allowed_origins = ["*"]
     expose_headers = ["ETag"]
   }
 }
@@ -49,15 +55,26 @@ resource "aws_s3_bucket_cors_configuration" "default" {
 data "aws_iam_policy_document" "default" {
   version = "2012-10-17"
   statement {
-    actions = [
-      "s3:Get*",
-      "s3:Put*"
-    ]
+    actions = ["s3:Get*"]
     effect = "Allow"
-    resources = ["${aws_s3_bucket.default.arn}//highthon/*"]
+    resources = ["${aws_s3_bucket.default.arn}/img/*"]
     principals {
       identifiers = ["*"]
       type        = "AWS"
+    }
+  }
+  statement {
+    actions = ["s3:Put*"]
+    effect = "Allow"
+    resources = ["${aws_s3_bucket.default.arn}/img/*"]
+    principals {
+      identifiers = ["*"]
+      type        = "AWS"
+    }
+    condition {
+      test     = "IpAddress"
+      variable = "aws:SourceIp"
+      values   = [aws_instance.ec2.public_ip]
     }
   }
 }
