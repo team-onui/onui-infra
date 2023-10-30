@@ -1,0 +1,17 @@
+### DS_Stroe ###
+.DS_Store
+
+### env variables ###
+env.tf
+
+### terraform ###
+.terraform/*
+.terraform.*
+terraform.tfstate
+terraform.tfstate.*
+.terraform
+dev.tfvars
+highthon-architecture.iml
+
+### intelliJ ###
+.idea
