@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "default" {
-  bucket = "${var.app_name}-submit"
+  bucket = "${var.app_name}-storage"
   force_destroy = true
   tags = {
-    Name = "${var.app_name}-submit"
+    Name = "${var.app_name}-storage"
     name = "onui"
   }
 }
