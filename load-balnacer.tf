@@ -33,7 +33,7 @@ resource "aws_lb_target_group" "http" {
 
   health_check {
     interval            = 120
-    path                = "/auth/google/link"
+    path                = "/healthcheck"
     timeout             = 60
     matcher             = "200"
     healthy_threshold   = 5
